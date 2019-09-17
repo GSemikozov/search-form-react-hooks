@@ -1,24 +1,44 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+const peoples = [
+  'Ivan',
+  'Jonny',
+  'Bimba',
+  'Kyle',
+  'Arni',
+  'Matip',
+  'Rich',
+  'Bussijaam'
+];
 
 function App() {
+  const [ searchTerm, setSearchTerm ] = React.useState('');
+  const handleChange = event => {
+    setSearchTerm(event.target.value);
+  }
+
+  const [ searchResult, setSearchResult ] = React.useState([]);
+
+  // with useEffect
+  React.useEffect(() => {
+    const results = peoples.filter(person => 
+      person.toLowerCase().includes(searchTerm)
+    );
+    setSearchResult(results);
+  }, [searchTerm]);
+
+  // or just like below
+  // const results = !searchTerm ? peoples : peoples.filter(person => person.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase().trim()));
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <form>
+        <input type='search' placeholder='search' value={ searchTerm } onChange={ handleChange } />
+      </form>
+      <ul>
+        {
+          searchResult.map(item => <li>{ item }</li>)
+        }
+      </ul>
     </div>
   );
 }
